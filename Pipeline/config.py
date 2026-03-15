@@ -7,24 +7,18 @@ import subprocess
 import sys
 from pathlib import Path
 
-# ─────────────────────────────────────────────────────
-# Skill home directory — all data lives here
-# ─────────────────────────────────────────────────────
+
 SKILL_DIR = Path.home() / ".youtube-shorts-pipeline"
 DRAFTS_DIR = SKILL_DIR / "drafts"
 MEDIA_DIR = SKILL_DIR / "media"
 LOGS_DIR = SKILL_DIR / "logs"
 CONFIG_FILE = SKILL_DIR / "config.json"
 
-# ─────────────────────────────────────────────────────
-# Video constants
-# ─────────────────────────────────────────────────────
+
 VIDEO_WIDTH = 1080
 VIDEO_HEIGHT = 1920
 
-# ─────────────────────────────────────────────────────
-# Voice config — override via env or config.json
-# ─────────────────────────────────────────────────────
+
 VOICE_ID_EN = os.environ.get("VOICE_ID_EN", "JBFqnCBsd6RMkjVDRZzb")  # George
 VOICE_ID_HI = os.environ.get("VOICE_ID_HI", "JBFqnCBsd6RMkjVDRZzb")
 
@@ -37,9 +31,7 @@ STOPWORDS = {
 }
 
 
-# ─────────────────────────────────────────────────────
-# Utilities
-# ─────────────────────────────────────────────────────
+
 def write_secret_file(path: Path, content: str):
     """Write a file with 0600 permissions (owner read/write only).
 
@@ -66,9 +58,7 @@ def extract_keywords(text: str) -> str:
     return " ".join([w for w in words if w and w not in STOPWORDS and len(w) > 2][:4])
 
 
-# ─────────────────────────────────────────────────────
-# API key resolution — env → config.json
-# ─────────────────────────────────────────────────────
+
 def _get_key(name: str) -> str:
     """Resolve an API key: environment variable first, then config.json."""
     val = os.environ.get(name)
@@ -89,9 +79,7 @@ def get_anthropic_key() -> str:
     return _get_key("ANTHROPIC_API_KEY")
 
 
-# ─────────────────────────────────────────────────────
-# Claude Max OAuth support
-# ─────────────────────────────────────────────────────
+
 CLAUDE_CREDENTIALS = Path.home() / ".claude" / ".credentials.json"
 
 
@@ -123,7 +111,7 @@ def call_claude_cli(prompt: str, model: str = "claude-sonnet-4-6", max_tokens: i
     if not claude_path:
         raise RuntimeError("claude CLI not found. Install Claude Code or set ANTHROPIC_API_KEY.")
 
-    # Strip CLAUDECODE env var to allow running from within a Claude Code session
+    
     env = {k: v for k, v in os.environ.items() if k != "CLAUDECODE"}
 
     r = subprocess.run(
@@ -136,7 +124,7 @@ def call_claude_cli(prompt: str, model: str = "claude-sonnet-4-6", max_tokens: i
     if r.returncode != 0:
         raise RuntimeError(f"claude CLI failed: {r.stderr[:300]}")
     output = r.stdout.strip()
-    # Claude CLI may append "Error: Reached max turns" — strip it
+    
     if output.endswith("Error: Reached max turns (3)"):
         output = output[: -len("Error: Reached max turns (3)")].strip()
     return output
@@ -207,9 +195,6 @@ def save_config(config: dict):
     write_secret_file(CONFIG_FILE, json.dumps(config, indent=2))
 
 
-# ─────────────────────────────────────────────────────
-# First-run interactive setup
-# ─────────────────────────────────────────────────────
 def run_setup():
     """Interactive first-run setup — saves config.json and runs YouTube OAuth."""
     print("\n" + "=" * 60)

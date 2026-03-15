@@ -5,8 +5,8 @@ import requests
 from PIL import Image, ImageDraw, ImageFont
 
 from .config import get_gemini_key
-from .log import log
-from .retry import with_retry
+from .loging import log
+from .rerun import with_retry
 
 THUMB_WIDTH = 1280
 THUMB_HEIGHT = 720

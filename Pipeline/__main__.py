@@ -1,17 +1,15 @@
-"""CLI entry point — python -m pipeline."""
-
 import argparse
 import sys
 import time
 from pathlib import Path
 
 from .config import CONFIG_FILE, DRAFTS_DIR, MEDIA_DIR, run_setup
-from .log import log, set_verbose
+from .loging import log, set_verbose
 
 
 def cmd_draft(args):
-    from .draft import generate_draft
-    from .state import PipelineState
+    from .production import generate_draft
+    from .PL_state import PipelineState
     import json
 
     DRAFTS_DIR.mkdir(parents=True, exist_ok=True)
@@ -38,12 +36,12 @@ def cmd_draft(args):
 
 
 def cmd_produce(args):
-    from .broll import generate_broll
-    from .voiceover import generate_voiceover
+    from .reel import generate_broll
+    from .audio import generate_voiceover
     from .captions import generate_captions
     from .music import select_and_prepare_music
-    from .assemble import assemble_video
-    from .state import PipelineState
+    from .muster import assemble_video
+    from .PL_state import PipelineState
     import json
     import shutil
 
@@ -142,7 +140,7 @@ def cmd_produce(args):
 def cmd_upload(args):
     from .upload import upload_to_youtube
     from .thumbnail import generate_thumbnail
-    from .state import PipelineState
+    from .PL_state import PipelineState
     import json
 
     draft_path = Path(args.draft)

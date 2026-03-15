@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from .log import log
+from .loging import log
 
 
 def _has_ass_filter() -> bool:

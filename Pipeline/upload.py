@@ -1,7 +1,7 @@
 from pathlib import Path
 from .config import get_youtube_token_path, write_secret_file
-from .log import log
-from .retry import with_retry
+from .loging import log
+from .rerun import with_retry
 
 
 @with_retry(max_retries=2, base_delay=5.0)

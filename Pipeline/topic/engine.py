@@ -1,7 +1,7 @@
 import concurrent.futures
 
 from ..config import load_config, get_anthropic_client, get_claude_backend, call_claude_cli
-from ..log import log
+from ..loging import log
 from .base import TopicCandidate
 
 

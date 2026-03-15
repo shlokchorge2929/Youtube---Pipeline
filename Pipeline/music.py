@@ -2,7 +2,7 @@
 import random
 from pathlib import Path
 
-from .log import log
+from .loging import log
 
 # Music directory ships with the package
 MUSIC_DIR = Path(__file__).resolve().parent.parent / "music"
@@ -43,7 +43,7 @@ def _get_speech_regions(audio_path: Path) -> list[tuple[float, float]]:
 
     # Fallback: get total duration and treat as one speech region
     try:
-        from .assemble import get_audio_duration
+        from .muster import get_audio_duration
         dur = get_audio_duration(audio_path)
         return [(0.0, dur)]
     except Exception:
